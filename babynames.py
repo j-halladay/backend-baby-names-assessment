@@ -40,6 +40,39 @@ Suggested milestones for incremental development:
 
 
 def extract_names(filename):
+    list1 = []
+    dict1 = {}
+    for file in filename:
+
+        f = open(file)
+        fr = f.readlines()
+        for line in fr:
+            # print(line)
+            if "Popularity in " in line:
+                year = re.search("<.*?>Popularity in [0-9]*",line).group()
+                # print(year)
+                year = year.split(" ")
+                year = year[-1]
+                list1.append(year)
+            position = re.search("<td>[0-9]+",line)
+            # print(position)
+            if position !=None :
+                # print("not none")
+                if position.group() in line:
+                    # print("hello")
+                    name = re.search("<td>[a-zA-Z]*</td><td>[a-zA-Z]*</td>", line ).group()
+                    # print(name, line)
+                    name = name.replace("<td>", " ").replace("</td>", " ").split()
+                    dict1[name[0]] = position.group().replace("<td>", "").replace("<td/>", "")
+                    dict1[name[1]] = position.group().replace("<td>", "").replace("<td/>", "")
+        for name in dict1:
+            list1.append(str(name+" "+dict1[name]))
+        list1.sort()
+        print(list1)
+        list1 = []
+        dict1 = {}
+        
+
     """
     Given a file name for baby.html, returns a list starting with the year string
     followed by the name-rank strings in alphabetical order.
@@ -76,7 +109,7 @@ def main():
     # +++your code here+++
     # For each filename, get the names, then either print the text output
     # or write it to a summary file
-
+    extract_names(file_list)
 
 if __name__ == '__main__':
     main()
